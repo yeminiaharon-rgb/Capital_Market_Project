@@ -216,3 +216,9 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Project Specific Data & Database files
+data/
+*.db
+*.sqlite3
+notebooks/playground.ipynb
