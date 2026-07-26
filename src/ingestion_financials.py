@@ -73,7 +73,7 @@ def save_financials_to_bronze_layer():
     for ticker in TICKERS:
         statements = fetch_ticker_financials(ticker)
 
-        for statement_name, df in statements.items():
+        for statement_name, df in statements.items(): 
             if df.empty:
                 continue
             combined_by_statement.setdefault(statement_name, []).append(df)
@@ -82,7 +82,7 @@ def save_financials_to_bronze_layer():
         combined_df = pd.concat(df_list, ignore_index=True)
         table_name = f"bronze_{statement_name}"
 
-        # 1. Save combined raw CSV in data/1_raw/
+        # 1. Save combined raw CSV in data/1_raw/+
         csv_path = RAW_DATA_DIR / f"{table_name}.csv"
         combined_df.to_csv(csv_path, index=False)
 
