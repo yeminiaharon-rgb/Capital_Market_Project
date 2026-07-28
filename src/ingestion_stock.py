@@ -8,7 +8,7 @@ from pathlib import Path
 from config.settings import TICKERS, DATA_DIR
 
 # Ensure raw data directory exists
-RAW_DATA_DIR = DATA_DIR / "1_raw"
+RAW_DATA_DIR = DATA_DIR / "bronze"
 RAW_DATA_DIR.mkdir(parents=True, exist_ok=True)
 
 # Define SQLite database path

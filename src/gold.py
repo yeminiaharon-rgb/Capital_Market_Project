@@ -5,7 +5,7 @@ from transformation import load, save
 def build_metrics_table(layer_name, table_names):
     metric_dfs = []
 
-    
+
 
     for name in table_names:
         df = load(layer_name, name)   # משתמש ישירות ב-load שכבר קיימת בקובץ
@@ -28,4 +28,4 @@ def build_metrics_table(layer_name, table_names):
     return metrics_table
 
 metrics_table = build_metrics_table("silver", ["income", "balance", "price", "dividends"])
-save(metrics_table, "silver", "metrics")
+save(metrics_table, "gold", "metrics")
