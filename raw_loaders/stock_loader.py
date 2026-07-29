@@ -1,6 +1,7 @@
 import pandas as pd
 import yfinance as yf
-
+import time
+import random
 
 def fetch_ticker_market_data(ticker: str, period: str = "3y") -> dict[str, pd.DataFrame]:
     print(f"Fetching raw market data for: {ticker} (Period: {period})...")
@@ -47,7 +48,7 @@ def fetch_all_market_data(tickers: list[str], period: str = "3y") -> dict[str, p
 
         if not market_data.get("divi", pd.DataFrame()).empty:
             all_dividends.append(market_data["divi"])
-
+        time.sleep(random.uniform(1.0, 2.5))
     return {
         "pr": pd.concat(all_prices, ignore_index=True) if all_prices else pd.DataFrame(),
         "divi": pd.concat(all_dividends, ignore_index=True) if all_dividends else pd.DataFrame(),

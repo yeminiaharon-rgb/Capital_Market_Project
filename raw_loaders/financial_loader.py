@@ -1,5 +1,7 @@
 import pandas as pd
 import yfinance as yf
+import time
+import random
 
 from config.settings import TABLES
 
@@ -19,7 +21,7 @@ def fetch_ticker_financials(ticker: str) -> dict[str, pd.DataFrame]:
 
     try:
         stock = yf.Ticker(ticker)
-
+        
         # each of these comes back with metrics as rows and report dates as
         # columns, so we transpose (.T) to get one row per report date,
         # matching the shape of the price data (rows = dates)
@@ -61,7 +63,7 @@ def fetch_all_financials(tickers: list[str]) -> dict[str, pd.DataFrame]:
             if df.empty:
                 continue
             combined_by_statement.setdefault(key, []).append(df)
-
+        time.sleep(random.uniform(1.0, 2.5))
     return {
         key: pd.concat(df_list, ignore_index=True)
         for key, df_list in combined_by_statement.items()

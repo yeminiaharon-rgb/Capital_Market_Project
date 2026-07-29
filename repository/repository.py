@@ -1,13 +1,14 @@
 import sqlite3
 import pandas as pd
 
-from config.settings import TABLES, DB_PATH, LAYERS, LAYER_DIRS
+from config.settings import TABLES, DB_PATH, DB_STREAMLIT_PATH, LAYERS, LAYER_DIRS
 
 
 class Repository:
 
-    def __init__(self, db_path=DB_PATH, layer_dirs=None):
+    def __init__(self, db_path=DB_PATH, streamlit_db_path=DB_STREAMLIT_PATH, layer_dirs=None):
         self.db_path = db_path
+        self.streamlit_db_path = streamlit_db_path
         self.layer_dirs = layer_dirs or LAYER_DIRS
         for path in self.layer_dirs.values():
             path.mkdir(parents=True, exist_ok=True)
@@ -25,10 +26,12 @@ class Repository:
         with sqlite3.connect(self.db_path) as conn:
             return pd.read_sql(f"SELECT * FROM {table}", conn)
 
-    def save(self, df, layer, name):
+    def save(self, df, layer, name, save_to_streamlit=False):
         table = self._table_name(layer, name)
         self._write_to_database(df, table)
         self._write_to_csv(df, layer, table)
+        if save_to_streamlit:
+            self._write_to_streamlit_database(df, table)
 
     def _write_to_database(self, df, table):
         with sqlite3.connect(self.db_path) as conn:
@@ -39,3 +42,13 @@ class Repository:
         csv_path = self._csv_path(layer, table)
         df.to_csv(csv_path, index=False)
         print(f"Successfully stored table '{table}' in {csv_path.parent}.")
+
+    def _write_to_streamlit_database(self, df, table):
+        with sqlite3.connect(self.streamlit_db_path) as conn:
+            df.to_sql(table, conn, if_exists="replace", index=False)
+        print(f"Successfully stored table '{table}' in Streamlit DB.")
+
+    def load_streamlit(self, layer, name):
+        table = self._table_name(layer, name)
+        with sqlite3.connect(self.streamlit_db_path) as conn:
+            return pd.read_sql(f"SELECT * FROM {table}", conn)

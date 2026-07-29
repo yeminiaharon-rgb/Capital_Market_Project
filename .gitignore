@@ -222,3 +222,12 @@ data/
 *.db
 *.sqlite3
 notebooks/playground.ipynb
+
+
+!tase_streamlit.db
+
+venv/
+__pycache__/
+*.pyc
+.DS_Store
+ 

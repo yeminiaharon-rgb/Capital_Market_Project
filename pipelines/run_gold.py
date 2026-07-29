@@ -12,11 +12,11 @@ def run():
     named_dfs = {name: repo.load("silver", name) for name in source_keys}
 
     metrics_table = build_metrics_table(named_dfs)
-    repo.save(metrics_table, layer="gold", name="metrics")
+    repo.save(metrics_table, "gold", "metrics", True)
 
 
     scores_table = compute_metric_scores(metrics_table, METRICS_CONFIG, weights=None)
-    repo.save(scores_table, layer="gold", name="scores")
+    repo.save(scores_table,"gold", "scores")
 
     print("Gold metrics and scores tables built and saved successfully.")
 

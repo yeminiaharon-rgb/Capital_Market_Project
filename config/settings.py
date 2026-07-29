@@ -4,6 +4,8 @@ from pathlib import Path
 
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 DB_PATH = DATA_DIR / "tase_data_warehouse.db"
+DB_STREAMLIT_PATH = DATA_DIR / "tase_streamlit.db"
+
 
 LAYERS = ["bronze", "silver", "gold"]
 

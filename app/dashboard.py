@@ -89,11 +89,11 @@ st.title("📈 דירוג מניות לפי מדדים פיננסיים")
 st.caption("השוואת שינוי שנתי (current מול year_ago) בין המניות, מנורמל ומשוקלל לציון אחד")
 
 repo = Repository()
-
+ 
 
 @st.cache_data
 def load_metrics_table():
-    return repo.load("gold", "metrics")
+    return repo.load_streamlit("gold", "metrics")
 
 
 try:
