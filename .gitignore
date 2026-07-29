@@ -217,12 +217,15 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 
+
 # Project Specific Data & Database files
-data/
+data/*
 *.db
 *.sqlite3
 notebooks/playground.ipynb
-!tase_streamlit.db
+!data/
+!data/tase_streamlit.db
+!**/tase_streamlit.db
 
 venv/
 __pycache__/
