@@ -12,7 +12,7 @@ def run():
         if df.empty:
             print(f"Warning: No combined data to save for '{key}'.")
             continue
-        repo.save(df, layer="bronze", name=key)
+        repo.save(df, layer="bronze", name=key, check_nulls=False)
  
     print("Bronze market data ingestion completed successfully.")
  

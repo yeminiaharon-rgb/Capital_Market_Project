@@ -26,8 +26,10 @@ class Repository:
         with sqlite3.connect(self.db_path) as conn:
             return pd.read_sql(f"SELECT * FROM {table}", conn)
 
-    def save(self, df, layer, name, save_to_streamlit=False):
+    def save(self, df, layer, name, save_to_streamlit=False, check_nulls=True):
         table = self._table_name(layer, name)
+        if check_nulls:
+            self._check_nulls(df, table)
         self._write_to_database(df, table)
         self._write_to_csv(df, layer, table)
         if save_to_streamlit:
@@ -52,3 +54,14 @@ class Repository:
         table = self._table_name(layer, name)
         with sqlite3.connect(self.streamlit_db_path) as conn:
             return pd.read_sql(f"SELECT * FROM {table}", conn)
+
+    def _check_nulls(self, df, table):
+        if df.isnull().values.any():
+            null_cols = df.columns[df.isnull().any()].tolist()
+            id_cols = [c for c in ['ticker', 'date'] if c in df.columns]
+            bad_rows = df[df.isnull().any(axis=1)]
+            print(f"Warning:found NULLs in table '{table}', columns: {null_cols}")
+            if id_cols:
+                print(bad_rows[id_cols + null_cols])
+            else:
+                print(bad_rows)
