@@ -86,7 +86,7 @@ h1, h2, h3 {{
 """, unsafe_allow_html=True)
 
 st.title("📈 דירוג מניות לפי מדדים פיננסיים")
-st.caption("השוואת שינוי שנתי (current מול year_ago) בין המניות, מנורמל ומשוקלל לציון אחד")
+st.caption(" השוואת צמיחה רבעונית בין המניות, מנורמלת ומשוקללת לציון אחד  (Quarterly Normalized YoY) ")
 
 repo = Repository()
  
