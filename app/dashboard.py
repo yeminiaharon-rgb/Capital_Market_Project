@@ -3,6 +3,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+import random
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
@@ -106,6 +107,32 @@ except Exception:
     st.stop()
 
 # ---------------------------------------------------------------------------
+# סייד-בר: בחירת מניות להשוואה
+# ---------------------------------------------------------------------------
+st.sidebar.header("🔍 בחירת מניות להשוואה")
+
+all_tickers = sorted(metrics_table["ticker"].unique().tolist())
+
+if "default_tickers" not in st.session_state:
+    st.session_state["default_tickers"] = random.sample(all_tickers, min(7, len(all_tickers)))
+
+selected_tickers = st.sidebar.multiselect(
+    "חפש/בחר טיקרים (עד 7 מניות)",
+    options=all_tickers,
+    default=st.session_state["default_tickers"],
+)
+
+if len(selected_tickers) > 7:
+    st.sidebar.warning("⚠️ ניתן לבחור עד 7 מניות - מוצגות 7 הראשונות שנבחרו.")
+    selected_tickers = selected_tickers[:7]
+
+if not selected_tickers:
+    selected_tickers = st.session_state["default_tickers"]
+
+metrics_table = metrics_table[metrics_table["ticker"].isin(selected_tickers)]
+
+
+# ---------------------------------------------------------------------------
 # סייד-בר: משקלים
 # ---------------------------------------------------------------------------
 st.sidebar.header("⚖️ משקלים למדדים")
@@ -175,7 +202,7 @@ with col2:
     labels = [METRICS_CONFIG[c.replace("_score", "")]["name"] for c in score_cols]
 
     fig_radar = go.Figure()
-    palette = [GOLD, TEAL, ROSE, "#7C9CE8"]
+    palette = [GOLD, TEAL, ROSE, "#7C9CE8", "#B98BDE", "#5FA8D3", "#E8935D"]
     for i, (_, row) in enumerate(scores_table.iterrows()):
         fig_radar.add_trace(go.Scatterpolar(
             r=[row[c] for c in score_cols] + [row[score_cols[0]]],
