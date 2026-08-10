@@ -90,7 +90,7 @@ st.title("📈 דירוג מניות לפי מדדים פיננסיים")
 st.caption(" השוואת צמיחה רבעונית בין המניות, מנורמלת ומשוקללת לציון אחד  (Quarterly Normalized YoY) ")
 
 repo = Repository()
- 
+
 
 @st.cache_data
 def load_metrics_table():
@@ -131,6 +131,15 @@ if not selected_tickers:
 
 metrics_table = metrics_table[metrics_table["ticker"].isin(selected_tickers)]
 
+# ---------------------------------------------------------------------------
+# מיפוי קבוע טיקר -> צבע (לפי סדר הבחירה, לא לפי דירוג - כדי שיישאר עקבי
+# בין הבר-צ'arט, הרדאר, ובין רענונים כשמשקלים משתנים והדירוג מתחלף)
+# ---------------------------------------------------------------------------
+palette = [GOLD, TEAL, ROSE, "#7C9CE8", "#B98BDE", "#5FA8D3", "#E8935D"]
+ticker_color_map = {
+    ticker: palette[i % len(palette)]
+    for i, ticker in enumerate(selected_tickers)
+}
 
 # ---------------------------------------------------------------------------
 # סייד-בר: משקלים
@@ -176,8 +185,7 @@ col1, col2 = st.columns([1, 1.2])
 
 with col1:
     st.subheader("דירוג לפי ציון סופי")
-    bar_colors = [GOLD if i == 0 else TEAL if v >= 5 else ROSE
-                  for i, v in enumerate(scores_table["final_score"])]
+    bar_colors = [ticker_color_map[t] for t in scores_table["ticker"]]
     fig_bar = go.Figure(go.Bar(
         x=scores_table["final_score"],
         y=scores_table["ticker"],
@@ -202,13 +210,12 @@ with col2:
     labels = [METRICS_CONFIG[c.replace("_score", "")]["name"] for c in score_cols]
 
     fig_radar = go.Figure()
-    palette = [GOLD, TEAL, ROSE, "#7C9CE8", "#B98BDE", "#5FA8D3", "#E8935D"]
     for i, (_, row) in enumerate(scores_table.iterrows()):
         fig_radar.add_trace(go.Scatterpolar(
             r=[row[c] for c in score_cols] + [row[score_cols[0]]],
             theta=labels + [labels[0]],
             name=row["ticker"],
-            line=dict(color=palette[i % len(palette)]),
+            line=dict(color=ticker_color_map[row["ticker"]]),
             fill="toself",
             opacity=0.5,
         ))
