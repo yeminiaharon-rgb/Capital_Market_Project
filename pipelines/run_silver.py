@@ -16,7 +16,7 @@ from transforms.silver_transforms import (
 def run():
     repo = Repository()
 
-    ### תחילת הטרנספורמציה - טבלאות רבעוניות
+    ### Start of transformation - quarterly tables
 
     df = repo.load("bronze", "valu")
     df = transform_valuation(df)
@@ -38,7 +38,7 @@ def run():
     df = get_current_and_year_ago(df)
     repo.save(df, "silver", "cash")
 
-    #### טבלאות לא רבעוניות
+    #### Non-quarterly tables
 
     df = repo.load("bronze", "divi")
     df = transform_dividends(df)
@@ -50,7 +50,7 @@ def run():
     df = get_period_column_d(df)
     repo.save(df, "silver", "pr")
 
-    ######## הוספת מדד מחושב להכנסות
+    ######## Adding a calculated metric to income
 
     df_income = repo.load("silver", "income")
     df_balance = repo.load("silver", "balance")
@@ -64,7 +64,7 @@ def run():
     repo.save(df_income, "silver", "income")
     repo.save(df_balance, "silver", "balance")
 
-    ######## הוספת מדד מחושב לדיבידנדים
+    ######## Adding a calculated metric to dividends
 
     df_dividends = repo.load("silver", "divi")
     df_price = repo.load("silver", "pr")

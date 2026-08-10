@@ -7,15 +7,6 @@ from config.settings import TABLES
 
 
 def fetch_ticker_financials(ticker: str) -> dict[str, pd.DataFrame]:
-    """
-    Fetch raw financial statements for a single ticker: balance sheet,
-    income statement, cash flow (quarterly) and valuation measures
-    (includes ready-made trailing P/E per quarter).
-    Returns a dict keyed by the SHORT table key ("balance", "cash",
-    "income", "valu") - matching config.settings.TABLES - so the caller
-    can pass it straight to Repository.save() without any translation.
-    No transformations or cleansings are applied here (Pure Bronze Layer).
-    """
     print(f"Fetching raw financial statements for: {ticker}...")
     statements = {}
 
@@ -50,11 +41,7 @@ def fetch_ticker_financials(ticker: str) -> dict[str, pd.DataFrame]:
 
 
 def fetch_all_financials(tickers: list[str]) -> dict[str, pd.DataFrame]:
-    """
-    Fetches financial statements for all tickers and combines them into
-    one DataFrame per statement type (all tickers together, distinguished
-    by the 'ticker' column). Returns dict keyed by short table key.
-    """
+
     combined_by_statement: dict[str, list[pd.DataFrame]] = {}
 
     for ticker in tickers:

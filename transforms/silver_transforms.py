@@ -2,7 +2,7 @@ import logging
 import pandas as pd
 
 
-###  ניקוי/עיבוד ראשוני לכל טבלה (per-table cleaning)
+###  Initial cleaning/processing per table (per-table cleaning)
 
 def transform_valuation(df):
     df = df.copy()
@@ -74,13 +74,13 @@ def validate_no_missing_values(df: pd.DataFrame) -> bool:
     return True
 
 
-#### צמצום הטבלאות הרבעוניות
-##### שתי עמודות בלבד לכל טיקר
+#### Reducing quarterly tables
+##### Only two columns per ticker
 
 def get_current_and_year_ago(df, ticker_col="ticker", date_col="date"):
     """
-    מחזיר DataFrame עם שתי שורות בלבד לכל טיקר:
-    current (השורה האחרונה) ו-year_ago (4 רבעונים אחורה, או הקרוב ביותר).
+    Returns a DataFrame with only two rows per ticker: 
+    current (the last row) and year_ago (4 quarters back, or nearest)
     """
     df = df.sort_values([ticker_col, date_col])
 
@@ -93,12 +93,12 @@ def get_current_and_year_ago(df, ticker_col="ticker", date_col="date"):
     return pd.concat([current, year_ago], ignore_index=True)
 
 
-##### צמצום טבלה שנתית
+##### Annual table reduction
 
 def get_period_column_y(df, ticker_col="ticker", date_col="date"):
     """
-    מחזיר DataFrame עם שתי שורות בלבד לכל טיקר עבור טבלה שנתית:
-    current (השורה האחרונה) ו-year_ago (השורה הראשונה).
+    Returns a DataFrame with only two rows per ticker for an annual table:
+    current (the last row) and year_ago (the first row)
     """
     df = df.sort_values([ticker_col, date_col])
 
@@ -111,12 +111,12 @@ def get_period_column_y(df, ticker_col="ticker", date_col="date"):
     return pd.concat([current, year_ago], ignore_index=True)
 
 
-##### צמצום טבלה יומית
+##### Daily table reduction
 
 def get_period_column_d(df):
     """
-    מחזיר DataFrame עם שתי שורות בלבד לכל טיקר עבור טבלה יומית:
-    current (התאריך האחרון) ו-year_ago (התאריך הקרוב ביותר לשנה אחורה).
+    Returns a DataFrame with only two rows per ticker for a daily table: 
+    current (the latest date) and year_ago (the date closest to a year ago).
     """
     results = []
 
@@ -141,12 +141,12 @@ def get_period_column_d(df):
     return pd.DataFrame(results).reset_index(drop=True)
 
 
-###  מדדים מחושבים בין טבלאות
+###  Calculated metrics between tables
 
 def merge_metric_from_table(base_df, other_df, metric_column):
     """
-    ממזג עמודת מדד אחת מטבלה אחרת (other_df) לתוך base_df,
-    לפי טיקר, period, והתאריך הקרוב ביותר.
+    Merges a single metric column from another table (other_df) 
+    into base_df, based on ticker, period, and the closest date.
     """
     base_df["date"] = pd.to_datetime(base_df["date"])
     other_df["date"] = pd.to_datetime(other_df["date"])
