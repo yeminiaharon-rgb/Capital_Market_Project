@@ -65,8 +65,10 @@ def compute_metric_scores(
     else:
         weight_map = {f"{key}_score": w for key, w in weights.items()}
 
-    weighted_sum = sum(scores[c] * weight_map.get(c, 0) for c in score_cols)
-    total_weight = sum(weight_map.get(c, 0) for c in score_cols)
-    scores["final_score"] = (weighted_sum / total_weight).round(2)
+    weights_series = pd.Series(weight_map)
+    weighted_scores = scores[score_cols].multiply(weights_series, axis=1)
+    valid_weights = scores[score_cols].notna().multiply(weights_series, axis=1).sum(axis=1)
+
+    scores["final_score"] = (weighted_scores.sum(axis=1) / valid_weights).round(2)
 
     return scores.reset_index()

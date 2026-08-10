@@ -19,12 +19,45 @@ LAYER_DIRS = {
 # Ticker list for ingestion (e.g., Tel Aviv 125 top stocks and global benchmarks)
 # Note: TASE stocks in yfinance require the '.TA' suffix
 TICKERS = [
-    "LUMI.TA",  # Bank Leumi
-    "POLI.TA",  # Bank Hapoalim
-    "DSCT.TA",  # Discount Bank
-    "FIBI.TA",  # First International Bank
+    # Banking & Finance
+    "LUMI.TA",   # Bank Leumi
+    "POLI.TA",   # Bank Hapoalim
+    "DSCT.TA",   # Discount Bank
+    "MZTF.TA",   # Mizrahi Tefahot Bank
+    "FIBI.TA",   # First International Bank
+    "PHOE.TA",   # The Phoenix Holdings
+    "HARL.TA",   # Harel Insurance
+    "CLIS.TA",   # Clal Insurance Group
+    
+    # Technology & Semiconductors
+    "NICE.TA",   # NICE Ltd.
+    "TSEM.TA",   # Tower Semiconductor
+    "MTRX.TA",   # Matrix IT
+    
+    # Pharma, Chemicals & Defense
+    "TEVA.TA",   # Teva Pharmaceutical
+    "ESLT.TA",   # Elbit Systems
+    "ICL.TA",    # ICL Group (Israel Chemicals)
+    
+    # Energy & Infrastructure
+    "DLEKG.TA",  # Delek Group
+    "NWMD.TA",   # NewMed Energy
+    "ENLT.TA",   # Enlight Renewable Energy
+    "ENOG.TA",   # Energean
+    "OPCE.TA",   # OPC Energy
+    
+    # Real Estate & Construction
+    "AZRG.TA",   # Azrieli Group
+    "MLSR.TA",   # Melisron
+    "BIG.TA",    # BIG Shopping Centers
+    "AMOT.TA",   # Amot Investments
+    "SPEN.TA",   # Shapir Engineering
+    "SKBN.TA",   # Shikun & Binui
+    
+    # Telecom & Consumer
+    "BEZQ.TA",   # Bezeq
+    "STRS.TA",   # Strauss Group
 ]
-
 
 LAYERS = [
     "bronze",  # 
